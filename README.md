@@ -1,0 +1,1 @@
+# Implementação Prática de Criptografia - 2026.1
