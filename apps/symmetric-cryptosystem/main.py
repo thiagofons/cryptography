@@ -3,9 +3,11 @@ from typing import List
 
 from adapters import (AesCipherAdapter, CustomCipherAdapter,
                       RichTerminalPrinterAdapter,
+                      TerminalComparisonReportAdapter,
                       TimePerformanceAnalyzerAdapter)
 from domain.use_cases import CompareCiphersUseCase
-from ports import CipherPort, PerformanceAnalyzerPort, TerminalPrinterPort
+from ports import (CipherPort, ComparisonReportPort, PerformanceAnalyzerPort,
+                   TerminalPrinterPort)
 
 
 def main ():
@@ -17,12 +19,16 @@ def main ():
     
     analyzer: PerformanceAnalyzerPort = TimePerformanceAnalyzerAdapter()
 
+    report_service: ComparisonReportPort = TerminalComparisonReportAdapter(
+        printer=printer
+    )
+
     # Use case
     comparison_use_case = CompareCiphersUseCase(
         first_cipher=custom_cipher,
         second_cipher=aes_cipher,
         analyzer=analyzer,
-        printer=printer        
+        report_service=report_service        
     )
 
     # Input data
@@ -39,9 +45,7 @@ def main ():
     # ===========================
     try:
         printer.print_title("Starting analysis")
-        report = comparison_use_case.execute(data_inputs=test_texts, key=master_key)
-
-        report.print_summary()
+        comparison_use_case.execute(data_inputs=test_texts, key=master_key)
 
     except Exception as e:
         printer.print_alert(f"Error: critical failure executing the test\n\n{e}")
