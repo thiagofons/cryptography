@@ -7,6 +7,18 @@ class CustomCipherAdapter(CipherPort):
     Implementa cifra simétrica baseada exclusivamente em Addition-Rotation-XOR.
     """
 
+    @property
+    def metadata(self) -> dict:
+        return {
+            "key_size": "256 bits (Ou o que você definiu)",
+            "block_size": "Fluxo / Palavras de 32 bits (Estilo ARX)",
+            "parallelization": "Depende do Modo (Se estilo ChaCha/CTR, Altamente Paralelizável)",
+            "diffusion_confusion": "Alta (Provida pelo acúmulo de carry da Adição e Rotações bit-a-bit)",
+            "attack_resistance": "Imune a Cache-Timing Attacks (Sem S-Boxes). Resistência teórica baseada no número de rodadas contra criptoanálise diferencial",
+            "implementation_simplicity": "Altíssima (Apenas instruções nativas da CPU: +, <<<, ^)",
+            "scalability": "Alta (Estrutura ARX permite facilmente estender o estado ou o número de rodadas)"
+        }
+    
     def _rotate_left(self, val: int, r_bits: int, max_bits: int = 32) -> int:
         """Função auxiliar ARX: Rotação de bits à esquerda (Circular Left Shift)"""
         val = val & ((1 << max_bits) - 1)

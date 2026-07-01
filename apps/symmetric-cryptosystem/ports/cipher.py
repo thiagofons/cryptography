@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Dict
 
 
 class CipherPort(ABC):
@@ -7,24 +8,21 @@ class CipherPort(ABC):
     para todos os algoritmos criptográficos do sistema.
     """
 
+    @property
     @abstractmethod
-    def encrypt(self, plaintext: bytes, key: bytes) -> bytes:
+    def metadata(self) -> Dict[str, str]:
         """
-        Cifra o texto em claro utilizando uma chave secreta.
-
-        :param plaintext: Os dados originais em bytes.
-        :param key: A chave secreta em bytes.
-        :return: O dado cifrado em bytes (ciphertext).
+        Retorna um dicionário contendo as propriedades teóricas e estruturais 
+        do criptossistema (Tamanho de chave, bloco, paralelização, etc.).
         """
         pass
 
     @abstractmethod
-    def decrypt(self, ciphertext: bytes, key: bytes) -> bytes:
-        """
-        Decifra o texto cifrado utilizando a mesma chave secreta.
+    def encrypt(self, plaintext: bytes, key: bytes) -> bytes:
+        """Cifra o texto em claro utilizando uma chave secreta."""
+        pass
 
-        :param ciphertext: Os dados criptografados em bytes.
-        :param key: A chave secreta em bytes.
-        :return: O dado restaurado em bytes (plaintext).
-        """
+    @abstractmethod
+    def decrypt(self, ciphertext: bytes, key: bytes) -> bytes:
+        """Decifra o texto cifrado utilizando a mesma chave secreta."""
         pass

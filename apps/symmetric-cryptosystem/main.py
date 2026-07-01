@@ -44,7 +44,6 @@ def main ():
     # Execution
     # ===========================
     try:
-        printer.print_title("Starting analysis")
         comparison_use_case.execute(data_inputs=test_texts, key=master_key)
 
     except Exception as e:

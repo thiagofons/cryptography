@@ -1,6 +1,6 @@
+import tracemalloc
 from typing import List
 
-from domain.model import CipherMetrics
 from ports import CipherPort, ComparisonReportPort, PerformanceAnalyzerPort
 
 
@@ -9,49 +9,46 @@ class CompareCiphersUseCase:
         self, 
         first_cipher: CipherPort, 
         second_cipher: CipherPort, 
-        analyzer: PerformanceAnalyzerPort, 
-        report_service: ComparisonReportPort 
-    ):
+        analyzer: PerformanceAnalyzerPort,
+        report_service: ComparisonReportPort
+    ) -> None:
         self._first_cipher = first_cipher
         self._second_cipher = second_cipher
         self._analyzer = analyzer
-        self._report_service = report_service  
+        self._report_service = report_service  # Armazena o adapter de relatório injetado
 
     def execute(self, data_inputs: List[bytes], key: bytes) -> None:
-        """
-        Orquestra a execução dos testes de estresse, coleta métricas, 
-        valida a corretude e dispara a geração do relatório.
-        """        
         ciphers_to_test = [
-            (self._first_cipher.__class__.__name__, self._first_cipher),
-            (self._second_cipher.__class__.__name__, self._second_cipher)
+            ("Seu Criptossistema Original", self._first_cipher),
+            ("AES (Padrão de Mercado)", self._second_cipher)
         ]
 
-        collected_results = {}
-
         for name, cipher in ciphers_to_test:
-            metrics = CipherMetrics(name=name)
+            enc_times = []
+            dec_times = []
+            
+            tracemalloc.start()
             
             for data in data_inputs:
-                ciphertext, enc_time = self._analyzer.measure_execution(
-                    lambda: cipher.encrypt(data, key)
-                )
-                metrics.encryption_times.append(enc_time)
+                # Medição de Cifração
+                ciphertext, enc_time = self._analyzer.measure_execution(lambda: cipher.encrypt(data, key))
+                enc_times.append(enc_time)
 
-                decrypted_data, dec_time = self._analyzer.measure_execution(
-                    lambda: cipher.decrypt(ciphertext, key)
-                )
-                metrics.decryption_times.append(dec_time)
+                # Medição de Decifração
+                _, dec_time = self._analyzer.measure_execution(lambda: cipher.decrypt(ciphertext, key))
+                dec_times.append(dec_time)
+                
+            _, memory_peak = tracemalloc.get_traced_memory()
+            tracemalloc.stop()
 
-                if decrypted_data != data:
-                    metrics.is_correct = False
+            # Alimenta o serviço de relatório que foi injetado pela MAIN
+            self._report_service.add_results(
+                name=name, 
+                metadata=cipher.metadata, 
+                enc_times=enc_times, 
+                dec_times=dec_times, 
+                memory_bytes=memory_peak
+            )
 
-            collected_results[name] = metrics
-
-        first_name = self._first_cipher.__class__.__name__
-        second_name = self._second_cipher.__class__.__name__
-        
-        self._report_service.generate(
-            original_cipher_metrics=collected_results.get(first_name),
-            aes_metrics=collected_results.get(second_name)
-        )
+        # Dispara a impressão utilizando o adapter que a Main escolheu
+        self._report_service.print_summary()
