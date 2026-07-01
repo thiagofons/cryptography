@@ -3,7 +3,7 @@ from model import IAlgorithm
 
 class DiffieHellman (IAlgorithm):
     def __init__(self):
-        pass
+        super().__init__() 
 
     def generate_keys(self):
         raise NotImplementedError

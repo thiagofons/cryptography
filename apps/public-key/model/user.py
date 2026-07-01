@@ -1,6 +1,3 @@
-from model import IAlgorithm, Message
-
-
 class User:
     def __init__(self, name: str):
         self.name: str = name

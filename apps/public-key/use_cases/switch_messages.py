@@ -2,7 +2,7 @@ from model import IAlgorithm, Message, User
 
 
 class SwitchMessagesUseCase ():
-    def __init__(self, algorithm: IAlgorithm, sender: User, receiver: User, message: Message):
+    def __init__(self, algorithm: IAlgorithm, sender: User, receiver: User):
         self._algorithm = algorithm
         self._sender = sender
         self._receiver = receiver
@@ -21,13 +21,20 @@ class SwitchMessagesUseCase ():
         print(f"Original text ({self._sender.name}): {message.content}")
 
         # 2. Cyphering
-        encrypted_text = self._algorithm.encrypt(message, public_receiver)
-        encrypted_message = Message(content=encrypted_text)
+        cipher_tuple = self._algorithm.encrypt(
+            plain_text=message.content, 
+            public_key=public_receiver
+        )
+        encrypted_message = Message(content=cipher_tuple)
 
         print(f"In transit (cyphered): {encrypted_message.content}")
 
         # 3. Decyphering
-        decrypted_text = self._algorithm.decrypt(encrypted_message.content, private_receiver)
+        decrypted_text = self._algorithm.decrypt(
+            cipher_text=encrypted_message.content, 
+            public_key=public_receiver,       # <- Correção aqui
+            private_key=private_receiver       # <- Correção aqui
+        )
         decrypted_message = Message(content=decrypted_text)
 
         print(f"Received and decyphered: {decrypted_message.content}")
