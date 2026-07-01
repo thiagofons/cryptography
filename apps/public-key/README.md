@@ -14,7 +14,7 @@ $$p = 2q + 1$$
 
 onde $q$ também é um número primo grande (conhecido como Primo de Sophie Germain). 
 
-Sob essa configuração, a ordem do grupo é $\#(\mathbb{Z}/p\mathbb{Z})^* = p - 1 = 2q$. Pelo Teorema de Lagrange, os únicos subgrupos possíveis dentro desta estrutura possuem ordens contidas no conjunto de divisores $\{1, 2, q, 2q\}$, blindando o sistema contra ataques de fatoração de subgrupos (como o algoritmo de Pohlig-Hellman).
+Sob essa configuração, a ordem do grupo é $\text{ord}((\mathbb{Z}/p\mathbb{Z})^*) = p - 1 = 2q$. Pelo Teorema de Lagrange, os únicos subgrupos possíveis dentro desta estrutura possuem ordens contidas no conjunto de divisores $\{1, 2, q, 2q\}$, blindando o sistema contra ataques de fatoração de subgrupos (como o algoritmo de Pohlig-Hellman).
 
 ## Descrição da operação
 
