@@ -1,9 +1,12 @@
-from adapters import DiffieHellman, ElGamal
-from model import IAlgorithm, Message, User
+from adapters import DiffieHellman, ElGamal, RichTerminalPrinter
+from model import IAlgorithm, ITerminalPrinter, Message, User
 from use_cases import SwitchMessagesUseCase
 
 
 def main():
+    # Terminal printer
+    printer: ITerminalPrinter = RichTerminalPrinter()
+
     # Algorithms
     el_gamal: IAlgorithm = ElGamal()
     diffie_hellman: IAlgorithm = DiffieHellman()
@@ -19,7 +22,8 @@ def main():
     eg_use_case = SwitchMessagesUseCase(
         algorithm=el_gamal,
         sender=alice,
-        receiver=bob
+        receiver=bob,
+        printer=printer
     )
     # dh_use_case = SwitchMessagesUseCase(
     #     algorithm=diffie_hellman,
