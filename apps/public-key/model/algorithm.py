@@ -2,20 +2,16 @@ from abc import ABC, abstractmethod
 
 
 class IAlgorithm(ABC):
-    def __init__(self):
-        self.bit_length: int = 256
-
+    """
+    Abstract interface that forces both Diffie-Hellman and ElGamal
+    to implement standard key generation and protocol execution.
+    """
     @abstractmethod
     def generate_keys(self) -> tuple:
-        """Generate and returns the keys pair (public, private)"""
+        """Generates and returns a tuple containing (public_key, private_key)."""
         pass
 
     @abstractmethod
-    def encrypt(self, plain_text: str, public_key: str) -> str:
-        """Cyphers the plain text usig the public key"""
-        pass
-
-    @abstractmethod
-    def decrypt(self, cipher_text: str, public_key:str, private_key: str) -> str:
-        """Decyphers the cipher text using the private key"""
+    def run_protocol(self, sender_private_key, recipient_public_key, data=None) -> tuple:
+        """Executes the main cryptographic logic (Key Agreement or Encryption/Decryption)."""
         pass

@@ -1,46 +1,26 @@
 from adapters import DiffieHellman, ElGamal, RichTerminalPrinter
-from model import IAlgorithm, ITerminalPrinter, Message, User
-from use_cases import SwitchMessagesUseCase
+from model import ITerminalPrinter, Message, User
+from use_cases import (DiffieHellmanKeyExchangeUseCase,
+                       ElGamalMessageTransmissionUseCase)
 
 
 def main():
-    # Terminal printer
     printer: ITerminalPrinter = RichTerminalPrinter()
 
-    # Algorithms
-    el_gamal: IAlgorithm = ElGamal()
-    diffie_hellman: IAlgorithm = DiffieHellman()
-
-    # Users
     alice = User(name="Alice")
     bob = User(name="Bob")
 
-    # Message
-    message = Message("Hello, Bob! How are you?")
+    academic_message = Message(content="Cryptography Homework Sample Text 2026")
 
-    # Use cases
-    eg_use_case = SwitchMessagesUseCase(
-        algorithm=el_gamal,
-        sender=alice,
-        receiver=bob,
-        printer=printer
-    )
-    # dh_use_case = SwitchMessagesUseCase(
-    #     algorithm=diffie_hellman,
-    #     sender=alice,
-    #     receiver=bob,
-    # )
+    # --- EXECUTION 1: Diffie-Hellman key exchange ---
+    dh_algorithm = DiffieHellman(bit_length=256)
+    use_case_dh = DiffieHellmanKeyExchangeUseCase(dh_algorithm, sender=alice, receiver=bob, printer=printer)
+    use_case_dh.execute()  
 
-    # =======================================
-    # 1st round: El Gamal
-    # =======================================
-    eg_use_case.execute(message)
-
-    # =======================================
-    # 2nd round: Diffie Hellman
-    # =======================================
-    # print("Diffie Hellman:")
-    # dh_use_case.execute(message)
+    # --- EXECUTION 2: ElGamal message transmission ---
+    elgamal_algorithm = ElGamal(bit_length=512)
+    use_case_elgamal = ElGamalMessageTransmissionUseCase(elgamal_algorithm, sender=alice, receiver=bob, printer=printer)
+    use_case_elgamal.execute(message=academic_message)  
     
     return
 

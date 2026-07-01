@@ -1,16 +1,16 @@
 class User:
+    """Represents an entity/participant in the cryptographic communication."""
+    
     def __init__(self, name: str):
-        self.name: str = name
-        self.public_key: str = None
-        self._private_key: str = None
+        self.name = name
+        self.public_key = None
+        self.__private_key = None  
 
-    def set_keys(self, public_key: str, private_key: str):
-        """
-        Generate both public and private keys for the user
-        """
+    def set_keys(self, public_key: tuple, private_key):
+        """Stores the key pair assigned to this user."""
         self.public_key = public_key
-        self._private_key = private_key
-        pass
+        self.__private_key = private_key
 
     def get_private_key(self):
-        return self._private_key
+        """Securely exposes the private key when needed by the algorithm."""
+        return self.__private_key

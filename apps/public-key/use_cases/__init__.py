@@ -1,3 +1,4 @@
-from use_cases.switch_messages import SwitchMessagesUseCase
+from use_cases.key_exchange import DiffieHellmanKeyExchangeUseCase
+from use_cases.message_transmission import ElGamalMessageTransmissionUseCase
 
-__all__ = ["SwitchMessagesUseCase"]
+__all__ = ["DiffieHellmanKeyExchangeUseCase", "ElGamalMessageTransmissionUseCase"]
