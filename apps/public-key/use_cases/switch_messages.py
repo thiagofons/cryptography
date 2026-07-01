@@ -13,7 +13,7 @@ class SwitchMessagesUseCase():
         The sender sends a message to the receiver
         '''
         # Título da execução
-        self._printer.print_title(f"Fluxo de Troca de Mensagens: {self._sender.name} ➔ {self._receiver.name}")
+        self._printer.print_title(f"Fluxo de Troca de Mensagens usando {self._algorithm.__class__.__name__}: {self._sender.name} ➔ {self._receiver.name}")
 
         # 1. Key generation for both users
         public_sender, private_sender = self._algorithm.generate_keys()
