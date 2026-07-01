@@ -5,10 +5,10 @@ from ports import CipherPort, PerformanceAnalyzerPort, TerminalPrinterPort
 
 
 class CompareCiphersUseCase:
-    def __init__(self, first_cipher: CipherPort, second_cipher: CipherPort, analyser: PerformanceAnalyzerPort, printer: TerminalPrinterPort):
+    def __init__(self, first_cipher: CipherPort, second_cipher: CipherPort, analyzer: PerformanceAnalyzerPort, printer: TerminalPrinterPort):
         self._first_cipher = first_cipher
         self._second_cipher = second_cipher
-        self._analyser = analyser
+        self._analyzer = analyzer
         self._printer = printer
 
     def execute(self, data_inputs: List[bytes], key: bytes) -> ComparisonReport:

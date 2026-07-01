@@ -1,7 +1,7 @@
 import sys
 from typing import List
 
-from adapters import (AesCipherAdapter, CustomCypherAdapter,
+from adapters import (AesCipherAdapter, CustomCipherAdapter,
                       RichTerminalPrinterAdapter,
                       TimePerformanceAnalyzerAdapter)
 from domain.use_cases import CompareCiphersUseCase
@@ -12,7 +12,7 @@ def main ():
     # Instances
     printer: TerminalPrinterPort = RichTerminalPrinterAdapter()
 
-    custom_cipher: CipherPort = CustomCypherAdapter()
+    custom_cipher: CipherPort = CustomCipherAdapter()
     aes_cipher: CipherPort = AesCipherAdapter()
     
     analyzer: PerformanceAnalyzerPort = TimePerformanceAnalyzerAdapter()
@@ -21,7 +21,8 @@ def main ():
     comparison_use_case = CompareCiphersUseCase(
         first_cipher=custom_cipher,
         second_cipher=aes_cipher,
-        analyser=analyzer
+        analyzer=analyzer,
+        printer=printer        
     )
 
     # Input data
